@@ -9,18 +9,18 @@ import java.util.Date;
 public class MyTestDocument {
     private ObjectId id;
 
-    private String name; // name.fullName
-    private String streetAddress; // address.streetaddress
-    private String city; // address.city
-    private String state; // address.state
-    private String zip; // address.zip
-    private String employer; // company.name
-    private String title; // job.title
-    private String maritalStatus; // demographic.maritalstatus
-    private String gender; // demographic.sex
-    private String email; // internet.safeemailaddress
-    private String phoneNumber; // phonenumber.cellphone
-    private String healthProvider; // medical.hospitalname
+    private String name;
+    private String streetAddress;
+    private String city;
+    private String state;
+    private String zip;
+    private String employer;
+    private String title;
+    private String maritalStatus;
+    private String gender;
+    private String email;
+    private String phoneNumber;
+    private String healthProvider;
 
     // claim data
     private String claimType;
