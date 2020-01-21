@@ -102,7 +102,7 @@ public class MdbLoadGenerator {
                 totalInserted++;
             }
 
-            if(count == 5) {
+            if(count == 25) {
                 try{
                     log.info("Sleeping...");
                     TimeUnit.SECONDS.sleep(2);
