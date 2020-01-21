@@ -23,6 +23,8 @@ public class MdbLoadGenerator {
 
     private static Logger log = Logger.getLogger(MdbLoadGenerator.class.getName());
 
+    private int numDocsPerSecond = 25;
+
     private String mongodbConnectionUri;
     private String mongodbDatabaseName;
     private String mongodbCollection;
@@ -96,13 +98,13 @@ public class MdbLoadGenerator {
 
             int count = 0;
 
-            while(count < 5) {
+            while(count < this.numDocsPerSecond) {
                 mongoCollection.insertOne(new MyTestDocument());
                 count++;
                 totalInserted++;
             }
 
-            if(count == 25) {
+            if(count == this.numDocsPerSecond) {
                 try{
                     log.info("Sleeping...");
                     TimeUnit.SECONDS.sleep(2);
