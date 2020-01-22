@@ -24,7 +24,7 @@ public class RandomDataGenerator {
      * @return
      */
     public static BigDecimal getRandomBigDecimal() {
-        BigDecimal bd = new BigDecimal(Double.toString(Math.random() * 1000));
+        BigDecimal bd = new BigDecimal(Double.toString(Math.random() * 1500));
         bd = bd.setScale(2, RoundingMode.HALF_UP);
 
         return bd;
