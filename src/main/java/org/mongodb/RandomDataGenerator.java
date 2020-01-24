@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Arrays;
-import java.util.Random;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -17,14 +17,25 @@ public class RandomDataGenerator {
     private static List<String> claimTypes
             = Arrays.asList("Disability", "Illness", "Life", "Hospital", "Vision", "Accident", "Dental");
 
-    private static Random rng = new Random();
+    private static ThreadLocalRandom randomGenerator = ThreadLocalRandom.current();
 
     /**
      *
      * @return
      */
     public static BigDecimal getRandomBigDecimal() {
-        BigDecimal bd = new BigDecimal(Double.toString(Math.random() * 1500));
+        BigDecimal bd = new BigDecimal(Double.toString(randomGenerator.nextDouble()));
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+
+        return bd;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static BigDecimal getRandomBigDecimalWithUpperBound(double upperBound) {
+        BigDecimal bd = new BigDecimal(Double.toString(randomGenerator.nextDouble(upperBound)));
         bd = bd.setScale(2, RoundingMode.HALF_UP);
 
         return bd;
@@ -35,12 +46,13 @@ public class RandomDataGenerator {
      * @return
      */
     public static String getRandomClaimType() {
-        int randomType = rng.nextInt(RandomDataGenerator.claimTypes.size());
+        int randomType = randomGenerator.nextInt(RandomDataGenerator.claimTypes.size());
 
         return RandomDataGenerator.claimTypes.get(randomType);
     }
 
     /**
+     * Random date within last 5 years
      *
      * @return
      */
@@ -54,6 +66,32 @@ public class RandomDataGenerator {
                 localDateTime.minusMonths(randomMonth).minusDays(randomDay).minusYears(randomYear);
 
         return java.util.Date.from(dateTimeSubmitted.atZone( ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * Smoke test the methods
+     * @param args
+     */
+    public static void main(String[] args) {
+        System.out.println("Testing getRandomBigDecimal.");
+        for(int idx = 1; idx < 100; idx++) {
+            System.out.println(RandomDataGenerator.getRandomBigDecimal());
+        }
+
+        System.out.println("Testing getRandomBigDecimalWithUpperBound.");
+        for(int idx = 1; idx < 100; idx++) {
+            System.out.println(RandomDataGenerator.getRandomBigDecimalWithUpperBound(2000));
+        }
+
+        System.out.println("Testing getRandomClaimType.");
+        for(int idx = 1; idx < 100; idx++) {
+            System.out.println(RandomDataGenerator.getRandomClaimType());
+        }
+
+        System.out.println("Testing getRandomDateSubmitted.");
+        for(int idx = 1; idx < 100; idx++) {
+            System.out.println(RandomDataGenerator.getRandomDateSubmitted());
+        }
     }
 
 }

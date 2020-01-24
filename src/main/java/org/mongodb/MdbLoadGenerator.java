@@ -25,6 +25,9 @@ public class MdbLoadGenerator {
 
     private int numDocsPerSecond = 25;
 
+    // Default to 1500
+    private double maxClaimAmount = 1500;
+
     private String mongodbConnectionUri;
     private String mongodbDatabaseName;
     private String mongodbCollection;
@@ -48,6 +51,22 @@ public class MdbLoadGenerator {
         this.mongodbConnectionUri = dotenv.get("MONGODB_CONNECTION_URI");
         this.mongodbDatabaseName = dotenv.get("MONGODB_DATABASE");
         this.mongodbCollection = dotenv.get("MONGODB_COLLECTION");
+
+        // claim amount
+        String envClaimAmountString = (dotenv.get("MAX_CLAIM_AMOUNT"));
+        if(envClaimAmountString != null && envClaimAmountString.length() > 0) {
+            try{
+                double maxClaim = Double.parseDouble(envClaimAmountString);
+                if(maxClaim != this.maxClaimAmount) {
+                    this.maxClaimAmount = maxClaim;
+                }
+
+                log.info("Max Claim Amount: " + this.maxClaimAmount);
+
+            } catch (Exception e) {
+                log.info("ERROR!  Error with parsing claim amount. Using default of: " + this.maxClaimAmount);
+            }
+        }
 
         if(this.mongodbConnectionUri != null && this.mongodbDatabaseName != null && this.mongodbCollection != null) {
             this.dbinit();
@@ -99,7 +118,7 @@ public class MdbLoadGenerator {
             int count = 0;
 
             while(count < this.numDocsPerSecond) {
-                mongoCollection.insertOne(new MyTestDocument());
+                mongoCollection.insertOne(new MyTestDocument(this.maxClaimAmount));
                 count++;
                 totalInserted++;
             }

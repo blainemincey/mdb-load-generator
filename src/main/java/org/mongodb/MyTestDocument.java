@@ -27,7 +27,7 @@ public class MyTestDocument {
     private java.util.Date dateClaimSubmitted;
     private BigDecimal claimAmount;
 
-    public MyTestDocument() {
+    public MyTestDocument(double maxClaimAmount) {
         Faker faker = new Faker();
 
         this.setName(faker.name().fullName());
@@ -44,7 +44,7 @@ public class MyTestDocument {
         this.setHealthProvider(faker.medical().hospitalName());
         this.setClaimType(RandomDataGenerator.getRandomClaimType());
         this.setDateClaimSubmitted(RandomDataGenerator.getRandomDateSubmitted());
-        this.setClaimAmount(RandomDataGenerator.getRandomBigDecimal());
+        this.setClaimAmount(RandomDataGenerator.getRandomBigDecimalWithUpperBound(maxClaimAmount));
 
     }
 
@@ -203,6 +203,6 @@ public class MyTestDocument {
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println(new MyTestDocument());
+        System.out.println(new MyTestDocument(1500));
     }
 }
