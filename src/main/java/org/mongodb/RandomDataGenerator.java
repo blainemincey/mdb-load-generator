@@ -15,7 +15,13 @@ public class RandomDataGenerator {
 
     // Claim Types
     private static List<String> claimTypes
-            = Arrays.asList("Disability", "Illness", "Life", "Hospital", "Vision", "Accident", "Dental");
+            = Arrays.asList(Constants.DISABILITY_CLAIM,
+                            Constants.ILLNESS_CLAIM,
+                            Constants.LIFE_CLAIM,
+                            Constants.HOSPITAL_CLAIM,
+                            Constants.VISION_CLAIM,
+                            Constants.ACCIDENT_CLAIM,
+                            Constants.DENTAL_CLAIM);
 
     private static ThreadLocalRandom randomGenerator = ThreadLocalRandom.current();
 

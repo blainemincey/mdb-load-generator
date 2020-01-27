@@ -27,6 +27,33 @@ public class MyTestDocument {
     private java.util.Date dateClaimSubmitted;
     private BigDecimal claimAmount;
 
+    /**
+     *
+     */
+    public MyTestDocument() {
+        Faker faker = new Faker();
+
+        this.setName(faker.name().fullName());
+        this.setStreetAddress(faker.address().streetAddress());
+        this.setCity(faker.address().cityName());
+        this.setState(faker.address().stateAbbr());
+        this.setZip(faker.address().zipCode());
+        this.setEmployer(faker.company().name());
+        this.setTitle(faker.job().title());
+        this.setMaritalStatus(faker.demographic().maritalStatus());
+        this.setGender(faker.demographic().sex());
+        this.setEmail(faker.internet().safeEmailAddress());
+        this.setPhoneNumber(faker.phoneNumber().cellPhone());
+        this.setHealthProvider(faker.medical().hospitalName());
+        this.setClaimType(RandomDataGenerator.getRandomClaimType());
+        this.setDateClaimSubmitted(RandomDataGenerator.getRandomDateSubmitted());
+        this.setClaimAmount(RandomDataGenerator.getRandomBigDecimal());
+    }
+
+    /**
+     *
+     * @param maxClaimAmount
+     */
     public MyTestDocument(double maxClaimAmount) {
         Faker faker = new Faker();
 
