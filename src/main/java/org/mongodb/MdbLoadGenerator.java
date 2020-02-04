@@ -23,13 +23,17 @@ public class MdbLoadGenerator {
 
     private static Logger log = Logger.getLogger(MdbLoadGenerator.class.getName());
 
-    private int numDocsPerSecond = 25;
+    // Be sure to set these values in .env file
+    private int numDocsPerSecond = 0;
+    private int numSecondsToSleep = 0;
 
+    // Default value but checks the prop in .env
     private boolean isMaxClaimPerType = false;
 
     // Default to 1500
     private double maxClaimAmount = 1500;
 
+    // MongoDB variables
     private String mongodbConnectionUri;
     private String mongodbDatabaseName;
     private String mongodbCollection;
@@ -57,11 +61,32 @@ public class MdbLoadGenerator {
     private void initialize() {
         log.info("Initialize from env props.");
 
+        // load .env properties
         Dotenv dotenv = Dotenv.configure().load();
 
+        // MongoDB variables
         this.mongodbConnectionUri = dotenv.get("MONGODB_CONNECTION_URI");
         this.mongodbDatabaseName = dotenv.get("MONGODB_DATABASE");
         this.mongodbCollection = dotenv.get("MONGODB_COLLECTION");
+
+        // how many docs to insert per second and how long to sleep between insert events
+        // try to parse out values
+        try {
+            this.numSecondsToSleep = Integer.parseInt(dotenv.get("NUM_SECONDS_TO_SLEEP"));
+            this.numDocsPerSecond = Integer.parseInt(dotenv.get("NUM_DOCS_PER_SECOND"));
+        } catch (Exception e) {
+            log.info("Exception thrown when parsing int for num seconds to sleep or num docs per second.");
+        }
+
+        // if both num docs per second and time to sleep are > 0, hit it.  Or, exit.
+        if(this.numDocsPerSecond > 0 && this.numSecondsToSleep > 0) {
+            log.info("== Num Docs per Second  ==> " + this.numDocsPerSecond);
+            log.info("== Num Seconds to Sleep ==> " + this.numSecondsToSleep);
+
+        } else {
+            log.severe("Check the .env file.  Num Docs per Second and Num Seconds to Sleep are not > 0!");
+            System.exit(0);
+        }
 
         // Run with specific max claims per claim type?
         String maxClaimPerClaimType = (dotenv.get("MAX_AMOUNT_PER_CLAIM_TYPE"));
@@ -165,6 +190,7 @@ public class MdbLoadGenerator {
 
             while(count < this.numDocsPerSecond) {
 
+                // if set for max claim per type or the default max claim amount
                 if(this.isMaxClaimPerType) {
                     mongoCollection.insertOne(this.getTestDocumentMaxPerClaimType());
                 } else {
@@ -178,7 +204,7 @@ public class MdbLoadGenerator {
             if(count == this.numDocsPerSecond) {
                 try{
                     log.info("Sleeping...");
-                    TimeUnit.SECONDS.sleep(2);
+                    TimeUnit.SECONDS.sleep(this.numSecondsToSleep);
                 } catch (InterruptedException ie) {
                     log.info("Exception: " + ie);
                     Thread.currentThread().interrupt();
