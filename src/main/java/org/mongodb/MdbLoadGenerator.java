@@ -27,6 +27,9 @@ public class MdbLoadGenerator {
     private int numDocsPerSecond = 0;
     private int numSecondsToSleep = 0;
 
+    // Max years old - default to 5
+    private int maxYearsClaimSubmitted = 5;
+
     // Default value but checks the prop in .env
     private boolean isMaxClaimPerType = false;
 
@@ -74,14 +77,17 @@ public class MdbLoadGenerator {
         try {
             this.numSecondsToSleep = Integer.parseInt(dotenv.get("NUM_SECONDS_TO_SLEEP"));
             this.numDocsPerSecond = Integer.parseInt(dotenv.get("NUM_DOCS_PER_SECOND"));
+            this.maxYearsClaimSubmitted = Integer.parseInt(dotenv.get("MAX_YEARS_DATE_SUBMITTED"));
+
         } catch (Exception e) {
             log.info("Exception thrown when parsing int for num seconds to sleep or num docs per second.");
         }
 
-        // if both num docs per second and time to sleep are > 0, hit it.  Or, exit.
-        if(this.numDocsPerSecond > 0 && this.numSecondsToSleep > 0) {
-            log.info("== Num Docs per Second  ==> " + this.numDocsPerSecond);
-            log.info("== Num Seconds to Sleep ==> " + this.numSecondsToSleep);
+        // if both num docs per second and time to sleep are > 0 and max years, proceed.  Or, exit.
+        if(this.numDocsPerSecond > 0 && this.numSecondsToSleep > 0 && this.maxYearsClaimSubmitted > 0) {
+            log.info("=== Num Docs per Second       ==> " + this.numDocsPerSecond);
+            log.info("=== Num Seconds to Sleep      ==> " + this.numSecondsToSleep);
+            log.info("=== Max Years Claim Submitted ==> " + this.maxYearsClaimSubmitted);
 
         } else {
             log.severe("Check the .env file.  Num Docs per Second and Num Seconds to Sleep are not > 0!");
@@ -194,7 +200,8 @@ public class MdbLoadGenerator {
                 if(this.isMaxClaimPerType) {
                     mongoCollection.insertOne(this.getTestDocumentMaxPerClaimType());
                 } else {
-                    mongoCollection.insertOne(new MyTestDocument(this.maxClaimAmount));
+                    mongoCollection.insertOne(
+                            new MyTestDocument(this.maxClaimAmount,this.maxYearsClaimSubmitted));
                 }
 
                 count++;
@@ -222,7 +229,7 @@ public class MdbLoadGenerator {
      * @return
      */
     private MyTestDocument getTestDocumentMaxPerClaimType() {
-        MyTestDocument myTestDocument = new MyTestDocument();
+        MyTestDocument myTestDocument = new MyTestDocument(this.maxYearsClaimSubmitted);
 
         String claimType = myTestDocument.getClaimType();
 

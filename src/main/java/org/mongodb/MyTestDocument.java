@@ -30,7 +30,7 @@ public class MyTestDocument {
     /**
      *
      */
-    public MyTestDocument() {
+    public MyTestDocument(int maxYearsDateSubmitted) {
         Faker faker = new Faker();
 
         this.setName(faker.name().fullName());
@@ -46,7 +46,7 @@ public class MyTestDocument {
         this.setPhoneNumber(faker.phoneNumber().cellPhone());
         this.setHealthProvider(faker.medical().hospitalName());
         this.setClaimType(RandomDataGenerator.getRandomClaimType());
-        this.setDateClaimSubmitted(RandomDataGenerator.getRandomDateSubmitted());
+        this.setDateClaimSubmitted(RandomDataGenerator.getRandomDateSubmittedMaxYears(maxYearsDateSubmitted));
         this.setClaimAmount(RandomDataGenerator.getRandomBigDecimal());
     }
 
@@ -54,7 +54,7 @@ public class MyTestDocument {
      *
      * @param maxClaimAmount
      */
-    public MyTestDocument(double maxClaimAmount) {
+    public MyTestDocument(double maxClaimAmount, int maxYearsClaimSubmitted) {
         Faker faker = new Faker();
 
         this.setName(faker.name().fullName());
@@ -70,7 +70,7 @@ public class MyTestDocument {
         this.setPhoneNumber(faker.phoneNumber().cellPhone());
         this.setHealthProvider(faker.medical().hospitalName());
         this.setClaimType(RandomDataGenerator.getRandomClaimType());
-        this.setDateClaimSubmitted(RandomDataGenerator.getRandomDateSubmitted());
+        this.setDateClaimSubmitted(RandomDataGenerator.getRandomDateSubmittedMaxYears(maxYearsClaimSubmitted));
         this.setClaimAmount(RandomDataGenerator.getRandomBigDecimalWithUpperBound(maxClaimAmount));
 
     }

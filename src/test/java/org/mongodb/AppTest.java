@@ -26,7 +26,7 @@ public class AppTest
 
         System.out.println("====== Generic Test Document ======");
         for(int idx = 0; idx < 2; idx++) {
-            System.out.println(new MyTestDocument());
+            System.out.println(new MyTestDocument(10));
         }
 
         System.out.println("====== Max Per Claim Test Document ======");
@@ -40,7 +40,7 @@ public class AppTest
      * @return
      */
     private MyTestDocument getTestDocumentMaxPerClaimType() {
-        MyTestDocument myTestDocument = new MyTestDocument();
+        MyTestDocument myTestDocument = new MyTestDocument(15);
 
         String claimType = myTestDocument.getClaimType();
 

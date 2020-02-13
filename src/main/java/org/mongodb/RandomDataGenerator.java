@@ -58,13 +58,13 @@ public class RandomDataGenerator {
     }
 
     /**
-     * Random date within last 5 years
      *
+     * @param maxYearsClaimSubmitted
      * @return
      */
-    public static java.util.Date getRandomDateSubmitted() {
+    public static java.util.Date getRandomDateSubmittedMaxYears(int maxYearsClaimSubmitted) {
         int randomMonth = (int)(Math.random() * 12); // 12 months
-        int randomYear = (int)(Math.random() * 5); // 5 years
+        int randomYear = (int)(Math.random() * maxYearsClaimSubmitted); // 5 years is default
         int randomDay = (int)(Math.random() * 30); // 30 days
 
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -96,7 +96,7 @@ public class RandomDataGenerator {
 
         System.out.println("Testing getRandomDateSubmitted.");
         for(int idx = 1; idx < 100; idx++) {
-            System.out.println(RandomDataGenerator.getRandomDateSubmitted());
+            System.out.println(RandomDataGenerator.getRandomDateSubmittedMaxYears(10));
         }
     }
 
